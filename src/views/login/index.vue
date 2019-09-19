@@ -1,27 +1,36 @@
 <template>
   <div class="login">
     <!-- 导航栏 -->
-    <van-nav-bar
-      title="登录"
-      left-arrow/>
+    <van-nav-bar title="登录"/>
       <!-- 登录表单 -->
-    <van-cell-group>
+
+      <!-- 4. 绑定第三方校验规则 -->
+      <!-- ValidationObserver 组件会渲染成一个form 表单
+      可以通过ref 调用这个组件的方法:validate 来进行js 验证
+      -->
+
+      <ValidationObserver tag='form' ref='loginForm'>
+        <!-- required|phone 不能有空格 -->
+      <ValidationProvider tag='div' name='手机号' rules='required|phone' v-slot= '{errors}'>
       <van-field
         v-model= 'user.mobile'
         required
-        clearable
         label="手机号"
         placeholder="请输入手机号"
-      />
+        :error-message='errors[0]'/>
+      </ValidationProvider>
 
+      <ValidationProvider tag='div' name='验证码' rules='required' v-slot= '{errors}'>
       <van-field
         v-model= 'user.code'
         type="password"
         label="验证码"
         placeholder="请输入验证码"
         required
+        :error-message='errors[0]'
       />
-     </van-cell-group>
+      </ValidationProvider>
+        </ValidationObserver>
      <div class="login-btn">
        <!-- 给登录按钮绑定 loading 属性 -->
        <van-button type="info" :loading="isLoginLoading" @click="onLogin">登录</van-button>
@@ -31,6 +40,7 @@
 
 <script>
 import { login } from '@/api/user'
+// 第三方表单校验插件
 
 export default {
   name: 'LoginIndex',
@@ -38,8 +48,8 @@ export default {
     return {
       isLoginLoading: false,
       user: {
-        mobile: '',
-        code: ''
+        mobile: '17673051343',
+        code: '246810'
       }
     }
   },
@@ -47,13 +57,16 @@ export default {
     // 登录处理函数
     async onLogin () {
       try {
+        const isValid = await this.$refs.loginForm.validate()
+        if (!isValid) {
+          return
+        }
+
         // 提交表单 登录时 loading
         this.isLoginLoading = true
         const { data } = await login(this.user)
-        this.$toast.success('登录成功')
         console.log(data)
-        // 登录成功之后 关闭
-        this.isLoginLoading = false
+        this.$toast.success('登录成功')
       } catch (err) {
         if (err.response && err.response.status === 400) {
           this.$toast.fail('手机号或验证码错误')
@@ -66,11 +79,13 @@ export default {
 }
 </script>
 
-<style lang='less' scoped>
+<style lang="less" scoped>
+.login {
   .login-btn {
     padding: 20px;
     .van-button {
       width: 100%;
     }
   }
+}
 </style>
