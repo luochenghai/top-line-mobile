@@ -40,8 +40,7 @@
 
 <script>
 import { login } from '@/api/user'
-// 第三方表单校验插件
-
+import { mapMutations } from 'vuex'
 export default {
   name: 'LoginIndex',
   data () {
@@ -54,6 +53,10 @@ export default {
     }
   },
   methods: {
+    // 然后在登录页面中登录成功以后将后端返回的 token 等数据通过提交
+    //  mutation 的方式保存到 Vuex 容器中：
+    ...mapMutations(['setUser']), // 映射
+
     // 登录处理函数
     async onLogin () {
       try {
@@ -67,6 +70,7 @@ export default {
         const { data } = await login(this.user)
         console.log(data)
         this.$toast.success('登录成功')
+        this.setUser(data.data) // 在上面映射之后,在这里调用 将登陆成功的用户状态（token）保存到 Vuex 容器中
       } catch (err) {
         if (err.response && err.response.status === 400) {
           this.$toast.fail('手机号或验证码错误')
@@ -75,6 +79,7 @@ export default {
       // 无论登录成功还是失败 都要关闭
       this.isLoginLoading = false
     }
+
   }
 }
 </script>

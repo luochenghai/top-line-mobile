@@ -45,6 +45,7 @@ extend('phone', {
   },
   message: '必须是手机号'
 })
+// 第三方表单校验插件
 Vue.component('ValidationProvider', ValidationProvider)
 Vue.component('ValidationObserver', ValidationObserver)
 Vue.config.productionTip = false
