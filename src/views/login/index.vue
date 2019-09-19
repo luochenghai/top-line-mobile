@@ -23,6 +23,7 @@
       />
      </van-cell-group>
      <div class="login-btn">
+       <!-- 给登录按钮绑定 loading 属性 -->
        <van-button type="info" :loading="isLoginLoading" @click="onLogin">登录</van-button>
      </div>
   </div>
@@ -46,14 +47,20 @@ export default {
     // 登录处理函数
     async onLogin () {
       try {
+        // 提交表单 登录时 loading
+        this.isLoginLoading = true
         const { data } = await login(this.user)
         this.$toast.success('登录成功')
         console.log(data)
+        // 登录成功之后 关闭
+        this.isLoginLoading = false
       } catch (err) {
         if (err.response && err.response.status === 400) {
           this.$toast.fail('手机号或验证码错误')
         }
       }
+      // 无论登录成功还是失败 都要关闭
+      this.isLoginLoading = false
     }
   }
 }
