@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
+// 1. 引入登录页面
+import Login from '@/views/login'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
   routes: [
     {
-      path: '/',
-      name: 'home'
-      // component: Home
+      name: 'login',
+      path: '/login',
+      component: Login
     }
   //   {
   //     // path: '/about',
