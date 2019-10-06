@@ -1,6 +1,6 @@
 module.exports = {
   plugins: {
-    autoprefixer: {
+    'autoprefixer': {
       browsers: ['Android >= 4.0', 'iOS >= 7']
     },
     // 配置 REM 适配 使用 postcss-pxtorem 将 px 转为 rem

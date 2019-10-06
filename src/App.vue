@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <router-view/>
+   <!-- 路由出口 -->
+   <keep-alive exclude='ArticleIndex'>
+      <router-view/>
+   </keep-alive>
+   <!-- /路由出口 -->
   </div>
 </template>
 

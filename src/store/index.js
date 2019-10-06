@@ -8,18 +8,19 @@
  * ***********/
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { getUser, saveUser } from '@/utils/user'
+import { getItem, setItem } from '@/utils/storage'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: getUser()
+    // 初始化的时候从本地存储获取数据，没有就是 null
+    user: getItem('user')
   },
   mutations: {
     setUser (state, user) {
       state.user = user
-      // 将数据放到本地存储的目的是为了保持刷新保存数据状态
-      saveUser(state.user)
+      // 存储数据的时候同时把数据也放到本地存储中
+      setItem('user', state.user)
     }
   },
   actions: {

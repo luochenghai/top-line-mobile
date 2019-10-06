@@ -15,6 +15,7 @@
       <van-field
         v-model= 'user.mobile'
         required
+        clearable
         label="手机号"
         placeholder="请输入手机号"
         :error-message='errors[0]'/>
@@ -70,6 +71,9 @@ export default {
         const { data } = await login(this.user)
         console.log(data)
         this.$toast.success('登录成功')
+        // this.$router.push('/') // 跳转
+        const redirect = this.$route.query.redirect || '/'
+        this.$router.push(redirect)
         this.setUser(data.data) // 在上面映射之后,在这里调用 将登陆成功的用户状态（token）保存到 Vuex 容器中
       } catch (err) {
         if (err.response && err.response.status === 400) {
